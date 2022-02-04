@@ -1,13 +1,95 @@
-body {
+#app,
+.scroll {
+  width: 100%;
+  height: 100%;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  padding: 0;
+  user-select: none;
+  overflow: hidden;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+#app {
+  overflow: auto;
 }
+
+.scroll {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow-y: auto;
+  scroll-snap-type: y proximity;
+}
+
+.scroll > div {
+  scroll-snap-align: start;
+}
+
+body {
+  position: fixed;
+  overflow: hidden;
+  overscroll-behavior-y: none;
+}
+
+.method {
+  cursor: pointer;
+}
+
+.method::before {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  top: -3px;
+  left: -10px;
+  border-left: 2px solid #45a293;
+  border-top: 2px solid #45a293;
+  transition: 0.5s;
+}
+
+.method::after {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  top: -3px;
+  right: -10px;
+  border-right: 2px solid #66fcf1;
+  border-top: 2px solid #66fcf1;
+  transition: 0.5s;
+}
+
+.method span::after {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  bottom: -3px;
+  right: -10px;
+  border-right: 2px solid #45a293;
+  border-bottom: 2px solid #45a293;
+  transition: 0.5s;
+}
+
+.method span::before {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  bottom: -3px;
+  left: -10px;
+  border-left: 2px solid #66fcf1;
+  border-bottom: 2px solid #66fcf1;
+  transition: 0.5s;
+}
+
+.method:hover::after,
+.method:hover::before,
+.method:hover span::after,
+.method:hover span::before {
+  width: calc(50% + 10px);
+  height: calc(50% + 3px);
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
