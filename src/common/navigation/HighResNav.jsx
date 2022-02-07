@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import {
   ClipboardListIcon,
@@ -11,7 +11,7 @@ import {
 import '../../index.css';
 
 export const HighResNav = () => {
-  const [isMenuOpne, setIsMenuOpen] = useState(true);
+  const [isMenuOpen, setIsMenuOpen] = useState(true);
   const classNameLi =
     'font-semibold text-white text-md lg:text-3xl text-primary-5 hover:text-primary-4 absolute';
   const classNameNavLinks =
@@ -22,7 +22,7 @@ export const HighResNav = () => {
     <nav>
       <button
         onClick={() => {
-          setIsMenuOpen(!isMenuOpne);
+          setIsMenuOpen(!isMenuOpen);
         }}
         className="absolute left-16 top-1/2 -translate-y-1/2 rounded-full p-2 text-primary-5 bg-primary-1 hover:text-primary-4 transition duration-400 transform hover:scale-110"
         type="button"
@@ -38,7 +38,7 @@ export const HighResNav = () => {
           <NavLink
             to="/"
             className={`${classNameNavLinks} ${
-              isMenuOpne ? `animate-fadeInTop` : 'animate-fadeOutTop'
+              isMenuOpen ? `animate-fadeInTop` : 'animate-fadeOutTop'
             }`}
             title="Home"
           >
@@ -53,7 +53,7 @@ export const HighResNav = () => {
           <NavLink
             to="/content"
             className={`${classNameNavLinks} ${
-              isMenuOpne ? `animate-fadeInRight` : 'animate-fadeOutRight '
+              isMenuOpen ? `animate-fadeInRight` : 'animate-fadeOutRight '
             }`}
             title="Projects"
           >
@@ -68,7 +68,7 @@ export const HighResNav = () => {
           <NavLink
             to="/content"
             className={`${classNameNavLinks} ${
-              isMenuOpne ? `animate-fadeInRight` : 'animate-fadeOutRight '
+              isMenuOpen ? `animate-fadeInRight` : 'animate-fadeOutRight '
             }`}
             title="About Me"
           >
@@ -83,7 +83,7 @@ export const HighResNav = () => {
           <NavLink
             to="/content"
             className={`${classNameNavLinks} ${
-              isMenuOpne ? `animate-fadeInBottom` : 'animate-fadeOutBottom '
+              isMenuOpen ? `animate-fadeInBottom` : 'animate-fadeOutBottom '
             }`}
             title="Magic"
           >

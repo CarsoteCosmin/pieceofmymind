@@ -32,13 +32,13 @@ export const HomePage = () => {
         </Canvas>
 
         <ContentPage scroll={scroll} ref={overlay} />
-        {/* <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
           <span className=" text-6xl text-primary-3">
             Hello World.
             <br />
           </span>
           <span className="text-sm text-primary-3">(scroll)</span>
-        </div> */}
+        </div>
       </Suspense>
     </>
   );

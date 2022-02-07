@@ -43,7 +43,7 @@ export const Particles = ({ scroll, count, isMobile, ...props }) => {
     actions['CameraAction.005'].time = THREE.MathUtils.lerp(
       actions['CameraAction.005'].time,
       actions['CameraAction.005'].getClip().duration * scroll.current,
-      0.1,
+      0.05,
     );
     group.current.children[0].children.forEach((child, index) => {
       child.material.color.lerp(
@@ -170,11 +170,12 @@ export const Particles = ({ scroll, count, isMobile, ...props }) => {
             name="Zeppelin"
             geometry={nodes.Zeppelin.geometry}
             material={materials.M_Zeppelin}
+            v
           />
         </group>
         <group
           name="Camera"
-          position={[-1.78, 2.04, 25.58]}
+          position={[-1.78, 2.04, 23.58]}
           rotation={[1.62, 0.01, 0.11]}
         >
           <PerspectiveCamera
