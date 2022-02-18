@@ -16,7 +16,11 @@ export const Particles = ({ scroll, count, isMobile, ...props }) => {
     castShadow: true,
     'material-envMapIntensity': 0.2,
   };
-  useEffect(() => void (actions['CameraAction.005'].play().paused = true), []);
+
+  useEffect(() => {
+    actions['CameraAction.005'].play().paused = true;
+  }, []);
+
   useEffect(() => {
     if (hovered)
       group.current.getObjectByName(hovered).material.color.set('white');
