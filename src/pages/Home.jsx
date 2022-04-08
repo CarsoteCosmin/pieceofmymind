@@ -1,9 +1,8 @@
 import React, { Suspense, useRef } from 'react';
 import { Canvas } from '@react-three/fiber';
-import Particles from '../ui/Patricles';
-import FullPageLoader from '../ui/FullPageLoader';
 import ContentPage from './Content';
 import { Environment } from '@react-three/drei';
+import { FullPageLoader, Models } from '../ui/index';
 
 export const HomePage = () => {
   const overlay = useRef();
@@ -23,7 +22,7 @@ export const HomePage = () => {
           }}
           className="bg-primary-2"
         >
-          <Particles
+          <Models
             scroll={scroll}
             count={isMobile ? 2500 : 5000}
             isMobile={isMobile}
@@ -33,10 +32,6 @@ export const HomePage = () => {
 
         <ContentPage scroll={scroll} ref={overlay} />
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
-          <span className=" text-6xl text-primary-3">
-            Hello World.
-            <br />
-          </span>
           <span className="text-sm text-primary-3">(scroll)</span>
         </div>
       </Suspense>
