@@ -121,8 +121,17 @@ module.exports = {
             transform: 'translatey(0)',
           },
         },
+        fadeIn: {
+          '0%': {
+            opacity: '0',
+          },
+          '100%': {
+            opacity: '1',
+          },
+        },
       },
       animation: {
+        fadeIn: 'fadeIn 0.5s',
         fadeInTop: 'fadeInTop 0.3s ease-in-out forwards',
         fadeInRight: 'fadeInRight 0.3s ease-in-out forwards',
         fadeInBottom: 'fadeInBottom 0.3s ease-in-out forwards',

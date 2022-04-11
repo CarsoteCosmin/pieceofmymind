@@ -1,11 +1,11 @@
 import React, { useRef, useMemo } from 'react';
-import * as THREE from 'three';
+import { MathUtils, Object3D } from 'three';
 import { useFrame } from '@react-three/fiber';
 
 export const Particles = ({ count, isMobile }) => {
   const mesh = useRef();
 
-  const dummy = useMemo(() => new THREE.Object3D(), []);
+  const dummy = useMemo(() => new Object3D(), []);
 
   const particles = useMemo(() => {
     const temp = [];
@@ -23,12 +23,12 @@ export const Particles = ({ count, isMobile }) => {
 
   useFrame((state) => {
     if (mesh.current && isMobile !== true) {
-      mesh.current.position.y = THREE.MathUtils.lerp(
+      mesh.current.position.y = MathUtils.lerp(
         mesh.current.position.y,
         state.mouse.y * 2,
         0.1,
       );
-      mesh.current.rotation.y = THREE.MathUtils.lerp(
+      mesh.current.rotation.y = MathUtils.lerp(
         mesh.current.rotation.y,
         state.mouse.x / 2,
         0.1,

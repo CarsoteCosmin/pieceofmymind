@@ -35,7 +35,7 @@ export const HighResNav = () => {
             setIsMenuOpen(true);
           }
         }}
-        className="absolute left-16 top-1/2 -translate-y-1/2 rounded-full p-2 text-primary-5 bg-primary-1 hover:text-primary-4 transition duration-400 transform hover:scale-110"
+        className="absolute border-2 border-primary-5 left-16 top-1/2 -translate-y-1/2 rounded-full p-2 text-primary-5 bg-primary-1 hover:text-primary-4 transition duration-400 transform hover:scale-110"
         type="button"
         title="Menu"
       >
