@@ -84,7 +84,10 @@ export const IntroductionText = ({
   }, [isSecondTextDone, isThirdText]);
 
   return (
-    <div key={text} className={`${show ? 'visible' : 'hidden'} text-2xl`}>
+    <div
+      key={text}
+      className={`${show ? 'visible' : 'hidden'} text-2xl font-semibold`}
+    >
       {text}
     </div>
   );

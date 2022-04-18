@@ -1,8 +1,8 @@
-import React, { useRef } from 'react';
+import React, { Suspense, useRef } from 'react';
 import { Environment } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { NavLink } from 'react-router-dom';
-import { Particles } from '../ui';
+import { FullPageLoader, Particles } from '../ui';
 
 import { LightningBoltIcon } from '@heroicons/react/outline';
 import '../index.css';
@@ -11,7 +11,7 @@ export const WelcomePage = () => {
   const overlay = useRef();
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
   return (
-    <>
+    <Suspense fallback={<FullPageLoader />}>
       <Canvas
         onCreated={(state) => state.events.connect(overlay.current)}
         className="bg-primary-2"
@@ -39,7 +39,7 @@ export const WelcomePage = () => {
           </div>
         </section>
       </section>
-    </>
+    </Suspense>
   );
 };
 

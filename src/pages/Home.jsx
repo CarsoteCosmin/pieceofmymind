@@ -1,6 +1,10 @@
-import React, { Suspense, useRef, useState } from 'react';
+import React, {
+  Suspense,
+  // useRef,
+  useState,
+} from 'react';
 import { Canvas } from '@react-three/fiber';
-import ContentPage from './Content';
+// import ContentPage from './Content';
 import { Environment } from '@react-three/drei';
 import { FullPageLoader, Models } from '../ui/index';
 import IntroductionText from '../components/IntroductionText';
@@ -8,9 +12,9 @@ import { LightBulbIcon } from '@heroicons/react/solid';
 // import Modal from '../common/portals/components/Modal';
 
 export const HomePage = () => {
-  const overlay = useRef();
-  const scroll = useRef(0);
-  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  // const overlay = useRef();
+  // const scroll = useRef(0);
+  // const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
   const [isLightButtonVisible, setIsLightButtonVisible] = useState(false);
   const [isFogVisible, setIsFogVisible] = useState(true);
@@ -23,7 +27,7 @@ export const HomePage = () => {
       <Suspense fallback={<FullPageLoader />}>
         <Canvas
           shadows
-          onCreated={(state) => state.events.connect(overlay.current)}
+          // onCreated={(state) => state.events.connect(overlay.current)}
           // raycaster={{
           //   computeOffsets: ({ clientX, clientY }) => ({
           //     offsetX: clientX,
@@ -34,9 +38,8 @@ export const HomePage = () => {
         >
           <Models
             fog={isFogVisible}
-            scroll={scroll}
-            count={isMobile ? 2500 : 5000}
-            isMobile={isMobile}
+            // scroll={scroll}
+            // isMobile={isMobile}
             isModelClicked={() => {
               if (isSecondText === true) {
                 setIsThirdText(true);
@@ -46,7 +49,7 @@ export const HomePage = () => {
           <Environment preset="city" />
         </Canvas>
 
-        <ContentPage scroll={scroll} ref={overlay} />
+        {/* <ContentPage scroll={scroll} ref={overlay} /> */}
 
         <div className="text-white absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
           <IntroductionText
@@ -59,7 +62,7 @@ export const HomePage = () => {
         </div>
 
         {isLightButtonVisible && (
-          <div className="absolute right-10 top-10 animate-fadeIn">
+          <div className="absolute right-10 top-10 animate-fadeIn select-none">
             <button
               onClick={() => {
                 setIsFogVisible(!isFogVisible);

@@ -1,14 +1,13 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useMemo } from 'react';
 
-import { Color } from 'three';
+import { Color, SpotLight } from 'three';
 
 import { useFrame } from '@react-three/fiber';
-import {
-  useGLTF,
-  useAnimations,
-  OrbitControls,
-  // FlyControls,
-} from '@react-three/drei';
+import { useGLTF } from '@react-three/drei';
+import { Physics } from '@react-three/cannon';
+
+import SkeletonModel from '../common/portals/components/models/SkeletonModel';
+import Ground from '../common/portals/components/models/Ground';
 
 // import MovingSpot from './MovingSpot';
 
@@ -21,52 +20,37 @@ const extras = {
 
 export const Models = ({
   fog,
-  scroll,
+  // scroll,
   isModelClicked = () => {},
-  ...props
 }) => {
-  const { nodes, materials, animations } = useGLTF('/models.glb');
+  const { nodes, materials } = useGLTF('/models.glb');
   const group = useRef();
   const [hovered, setHoverd] = useState(null);
-  const { actions } = useAnimations(animations, group);
-
-  useEffect(() => {
-    actions['CameraAction'].play().paused = true;
-  });
+  const light = useMemo(() => new SpotLight(0xffffff), []);
+  const [lightPosition, setLightPosition] = useState(null);
 
   useEffect(() => {
     if (hovered) {
-      group.current.getObjectByName(hovered).material.color.set('white');
+      group.current.getObjectByName(hovered).material.color.set('#C5C6C7');
     }
+    console.log(lightPosition);
 
     document.body.style.cursor = hovered ? 'pointer' : 'auto';
   }, [hovered]);
 
-  useFrame((state) => {
-    //camera move on scroll
-    // its much cooler with orbitcontrol but maybe will add this on mobile version
-    // actions['CameraAction'].time = MathUtils.lerp(
-    //   actions['CameraAction'].time,
-    //   actions['CameraAction'].getClip().duration * scroll.current,
-    //   0.05,
-    // );
-
-    group.current.children[0].children.forEach((child, index) => {
-      // hover effect
+  useFrame(({ clock }) => {
+    group.current.children.forEach((child, index) => {
       child.material.color.lerp(
         color
-          .set(hovered === child.name ? 'tomato' : '#202020')
+          .set(hovered === child.name ? '#66FCF1' : '#45A293')
           .convertSRGBToLinear(),
         hovered ? 0.1 : 0.05,
       );
+      if (hovered) {
+        // setLightPosition()
+      }
 
-      // float animation
-      const et = state.clock.elapsedTime;
-      // child.position.y = Math.sin((et + index * 2000) / 2) * 0.5;
-      // child.rotation.x = Math.sin((et + index * 2000) / 3) / 25;
-      // child.rotation.y = Math.cos((et + index * 2000) / 2) / 50;
-      // child.rotation.z = Math.sin((et + index * 2000) / 3) / 25;
-      // child.position.x = Math.sin(et + index * 2000);
+      const et = clock.elapsedTime;
       child.position.y = Math.sin(et + index * 1000);
     });
   });
@@ -74,115 +58,154 @@ export const Models = ({
   return (
     <>
       <pointLight
-        position={[0, 1, 0]}
-        distance={fog ? 40 : 150}
-        intensity={1}
-        color="lightblue"
+        position={[0, fog ? 10 : 20, 0]}
+        distance={fog ? 20 : 250}
+        intensity={0.5}
+        color="#66FCF1"
       />
-
+      {/* <SpotLight
+        castShadow
+        penumbra={0.2}
+        radiusTop={0.4}
+        radiusBottom={40}
+        distance={200}
+        // angle={0.45}
+        attenuation={20}
+        // anglePower={5}
+        intensity={1}
+        opacity={0.2}
+        position={[0, 30, -80]}
+      />
       {/* <MovingSpot position={[0, 25, 0]} /> */}
 
-      <group ref={group} {...props} dispose={null}>
-        <group
-          onPointerOver={(event) => {
-            event.stopPropagation();
-            setHoverd(event.object.name);
-          }}
-          onPointerOut={(event) => {
-            event.stopPropagation();
-            setHoverd(null);
-          }}
-          on
-          onClick={() => {
-            isModelClicked();
-          }}
-          // maybe scale the models by screen size using isMobile prop from home page
-          // scale={[0.25, 0.25, 0.25]}
-          position={[0, 0, 0]}
-        >
-          <mesh
-            name="Rocket"
-            geometry={nodes.Rocket.geometry}
-            material={materials.M_Rocket}
-            {...extras}
+      {lightPosition !== null && (
+        <>
+          <primitive
+            castShadow
+            penumbra={0.6}
+            radiusTop={0.4}
+            radiusBottom={30}
+            distance={60}
+            // angle={0.45}
+            attenuation={20}
+            // anglePower={5}
+            intensity={1}
+            opacity={0.5}
+            position={[lightPosition[0], 35, lightPosition[2]]}
+            object={light}
           />
-          <mesh
-            name="Notebook"
-            geometry={nodes.Notebook.geometry}
-            material={materials.M_Notebook}
-            {...extras}
+          <primitive
+            object={light.target}
+            position={[lightPosition[0], 0, lightPosition[2]]}
           />
-          <mesh
-            name="Roundcube"
-            geometry={nodes.Roundcube.geometry}
-            material={materials.M_Roundcube}
-            {...extras}
-          />
-          <mesh
-            name="Table"
-            geometry={nodes.Table.geometry}
-            material={materials.M_Table}
-            {...extras}
-          />
-          <mesh
-            name="VRHeadset"
-            geometry={nodes.VRHeadset.geometry}
-            material={materials.M_Headset}
-            {...extras}
-          />
-          <mesh
-            name="Zeppelin"
-            geometry={nodes.Zeppelin.geometry}
-            material={materials.M_Zeppelin}
-            {...extras}
-          />
-          <mesh
-            name="Headphones"
-            geometry={nodes.Headphones.geometry}
-            material={materials.M_Headphone}
-            {...extras}
-          />
-          <mesh
-            name="Notebook2"
-            geometry={nodes.Notebook2.geometry}
-            material={materials.M_Notebook2}
-            {...extras}
-          />
-        </group>
+        </>
+      )}
 
-        {/* <group name="Camera"> */}
-        {/* <PerspectiveCamera
-            makeDefault
-            // far={100}
-            // near={0.1}
-            // fov={35}
-            position={[0, 5, 10]}
-          /> */}
-        {/* </group> */}
+      <group
+        position={[0, 4, 0]}
+        ref={group}
+        onPointerOver={(event) => {
+          event.stopPropagation();
+          setLightPosition([
+            event.object.position['x'],
+            event.object.position['y'],
+            event.object.position['z'],
+          ]);
+          setHoverd(event.object.name);
+        }}
+        onPointerOut={(event) => {
+          event.stopPropagation();
+          setLightPosition(null);
+          setHoverd(null);
+        }}
+        onClick={() => {
+          isModelClicked();
+        }}
+      >
+        <mesh
+          position={[0, 0, -80]}
+          rotation={[0, 80, 0]}
+          name="Rocket"
+          geometry={nodes.Rocket.geometry}
+          material={materials.M_Rocket}
+          {...extras}
+        />
+        <mesh
+          position={[60, 0, -60]}
+          rotation={[0, -55, 0]}
+          name="Notebook"
+          geometry={nodes.Notebook.geometry}
+          material={materials.M_Notebook}
+          {...extras}
+        />
+        <mesh
+          scale={[7, 7, 7]}
+          position={[80, 0, 0]}
+          rotation={[0, 80, 0]}
+          name="Shoe"
+          geometry={nodes.Shoe.geometry}
+          material={materials.M_Shoe}
+          {...extras}
+        />
+        <mesh
+          position={[0, 0, 80]}
+          rotation={[0, 80, 0]}
+          name="VRHeadset"
+          geometry={nodes.VRHeadset.geometry}
+          material={materials.M_VRHeadset}
+          {...extras}
+        />
+        <mesh
+          position={[-60, 0, 60]}
+          rotation={[0, 80, 0]}
+          name="Cat"
+          geometry={nodes.Cat.geometry}
+          material={materials.M_Cat}
+          {...extras}
+        />
+        <mesh
+          position={[-80, 0, 0]}
+          rotation={[0, 80, 0]}
+          name="Headphones"
+          geometry={nodes.Headphones.geometry}
+          material={materials.M_Headphone}
+          {...extras}
+        />
+        <mesh
+          position={[60, 0, 60]}
+          rotation={[0, 80, 0]}
+          scale={[2, 2, 2]}
+          name="Controller"
+          geometry={nodes.Controller.geometry}
+          material={materials.M_Controller}
+          {...extras}
+        />
+        <mesh
+          position={[-60, 0, -60]}
+          rotation={[5, 0, 0]}
+          scale={[0.02, 0.02, 0.05]}
+          name="Hammer"
+          geometry={nodes.Hammer.geometry}
+          material={materials.M_Hammer}
+          {...extras}
+        />
       </group>
-      {fog && <fog attach="fog" args={['black', 20, 40]} />}
 
-      <OrbitControls
-        // keys={{
-        //   LEFT: 'ArrowLeft', //left arrow
-        //   UP: 'ArrowUp', // up arrow
-        //   RIGHT: 'ArrowRight', // right arrow
-        //   BOTTOM: 'ArrowDown', // down arrow
-        // }}
-        // far={100}
-        // near={0.1}
-        // fov={35}
-        maxDistance={45}
-        minDistance={10}
-        enablePan={false}
-        minPolarAngle={-Math.PI / 2}
-        maxPolarAngle={Math.PI / 2}
-      />
+      <Physics gravity={[0, -50, 0]}>
+        {/* {fog ? (
+          <PerspectiveCamera
+            makeDefault
+            position={[0, 17, -25]}
+            rotation={[0.2, 3.1, 0]}
+          />
+        ) : (
 
-      <mesh receiveShadow position={[0, -15, 0]} rotation-x={-Math.PI / 2}>
-        <planeGeometry args={[500, 500]} />
-        <meshPhongMaterial />
-      </mesh>
+        )} */}
+        <SkeletonModel />
+
+        <Ground position={[0, -5, 0]} />
+      </Physics>
+      <fog attach="fog" args={['black', 30, fog ? 60 : 0]} />
     </>
   );
 };
