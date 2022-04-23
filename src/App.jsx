@@ -1,5 +1,4 @@
 import React from 'react';
-
 // eslint-disable-next-line
 import { Header, Footer } from './common/index';
 import AppRouter from './router/index';
@@ -7,14 +6,13 @@ import AppRouter from './router/index';
 
 const App = () => {
   return (
-    <div className="App">
+    <div id="app" className="App">
       <div>
         <AppRouter />
       </div>
-
-      <header>
+      {/* <header>
         <Header />
-      </header>
+      </header> */}
 
       {/* <footer>
         <Footer />

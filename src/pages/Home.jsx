@@ -8,7 +8,9 @@ import { Canvas } from '@react-three/fiber';
 import { Environment } from '@react-three/drei';
 import { FullPageLoader, Models } from '../ui/index';
 import IntroductionText from '../components/IntroductionText';
-import { LightBulbIcon } from '@heroicons/react/solid';
+import { ArrowsExpandIcon, LightBulbIcon, XIcon } from '@heroicons/react/solid';
+import Smoke from '../ui/Smoke';
+import { Camera } from '../camera-control/Camera';
 // import Modal from '../common/portals/components/Modal';
 
 export const HomePage = () => {
@@ -16,10 +18,11 @@ export const HomePage = () => {
   // const scroll = useRef(0);
   // const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-  const [isLightButtonVisible, setIsLightButtonVisible] = useState(false);
+  const [isLightButtonVisible, setIsLightButtonVisible] = useState(true);
   const [isFogVisible, setIsFogVisible] = useState(true);
   const [isSecondText, setIsSecondText] = useState(false);
   const [isThirdText, setIsThirdText] = useState(false);
+  const [isFullScreen, setIsFullScreen] = useState(false);
   // const [isModalOpen, setIsModalOpen] = useState(true);
 
   return (
@@ -27,6 +30,7 @@ export const HomePage = () => {
       <Suspense fallback={<FullPageLoader />}>
         <Canvas
           shadows
+          // gl={{ alpha: false }}
           // onCreated={(state) => state.events.connect(overlay.current)}
           // raycaster={{
           //   computeOffsets: ({ clientX, clientY }) => ({
@@ -36,6 +40,12 @@ export const HomePage = () => {
           // }}
           className="bg-black"
         >
+          {/* <Camera
+            position={[0, 10, -25]}
+            rotation={[0.25, 3.15, 0]}
+          /> */}
+          <Smoke />
+
           <Models
             fog={isFogVisible}
             // scroll={scroll}
@@ -46,6 +56,7 @@ export const HomePage = () => {
               }
             }}
           />
+
           <Environment preset="city" />
         </Canvas>
 
@@ -60,6 +71,33 @@ export const HomePage = () => {
             isThirdText={isThirdText}
           />
         </div>
+
+        {isLightButtonVisible && (
+          <div className="absolute left-10 top-10 animate-fadeIn select-none">
+            <button
+              onClick={() => {
+                let element = document.getElementById('app');
+
+                if (isFullScreen) {
+                  document.exitFullscreen();
+                  setIsFullScreen(false);
+                } else {
+                  element.requestFullscreen();
+                  setIsFullScreen(true);
+                }
+              }}
+              type="button"
+              title={isFullScreen ? 'normal screen' : `full screen`}
+              className="text-white"
+            >
+              {isFullScreen ? (
+                <XIcon className="w-10 h-10" />
+              ) : (
+                <ArrowsExpandIcon className="w-10 h-10" />
+              )}
+            </button>
+          </div>
+        )}
 
         {isLightButtonVisible && (
           <div className="absolute right-10 top-10 animate-fadeIn select-none">

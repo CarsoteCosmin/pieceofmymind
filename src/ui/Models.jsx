@@ -1,15 +1,12 @@
 import React, { useRef, useEffect, useState, useMemo } from 'react';
 
 import { Color, SpotLight } from 'three';
-
 import { useFrame } from '@react-three/fiber';
-import { useGLTF } from '@react-three/drei';
-import { Physics } from '@react-three/cannon';
+import { OrbitControls, useGLTF } from '@react-three/drei';
+import { Debug, Physics } from '@react-three/cannon';
 
 import SkeletonModel from '../common/portals/components/models/SkeletonModel';
 import Ground from '../common/portals/components/models/Ground';
-
-// import MovingSpot from './MovingSpot';
 
 const color = new Color();
 const extras = {
@@ -31,9 +28,8 @@ export const Models = ({
 
   useEffect(() => {
     if (hovered) {
-      group.current.getObjectByName(hovered).material.color.set('#C5C6C7');
+      group.current.getObjectByName(hovered).material.color.set('white');
     }
-    console.log(lightPosition);
 
     document.body.style.cursor = hovered ? 'pointer' : 'auto';
   }, [hovered]);
@@ -42,13 +38,10 @@ export const Models = ({
     group.current.children.forEach((child, index) => {
       child.material.color.lerp(
         color
-          .set(hovered === child.name ? '#66FCF1' : '#45A293')
+          .set(hovered === child.name ? '#3500D3' : '#240090')
           .convertSRGBToLinear(),
         hovered ? 0.1 : 0.05,
       );
-      if (hovered) {
-        // setLightPosition()
-      }
 
       const et = clock.elapsedTime;
       child.position.y = Math.sin(et + index * 1000);
@@ -58,10 +51,19 @@ export const Models = ({
   return (
     <>
       <pointLight
-        position={[0, fog ? 10 : 20, 0]}
-        distance={fog ? 20 : 250}
-        intensity={0.5}
-        color="#66FCF1"
+        position={[0, -10, 0]}
+        distance={fog ? 20 : 500}
+        intensity={10}
+        color="#240090"
+      />
+
+      <directionalLight />
+
+      <pointLight
+        position={[0, 0, 0]}
+        distance={fog ? 20 : 200}
+        intensity={10}
+        color="#240090"
       />
       {/* <SpotLight
         castShadow
@@ -76,7 +78,7 @@ export const Models = ({
         opacity={0.2}
         position={[0, 30, -80]}
       />
-      {/* <MovingSpot position={[0, 25, 0]} /> */}
+      */}
 
       {lightPosition !== null && (
         <>
@@ -86,17 +88,16 @@ export const Models = ({
             radiusTop={0.4}
             radiusBottom={30}
             distance={60}
-            // angle={0.45}
             attenuation={20}
-            // anglePower={5}
-            intensity={1}
+            intensity={10}
             opacity={0.5}
             position={[lightPosition[0], 35, lightPosition[2]]}
+            color="white"
             object={light}
           />
           <primitive
             object={light.target}
-            position={[lightPosition[0], 0, lightPosition[2]]}
+            position={[lightPosition[0], 10, lightPosition[2]]}
           />
         </>
       )}
@@ -115,7 +116,7 @@ export const Models = ({
         }}
         onPointerOut={(event) => {
           event.stopPropagation();
-          setLightPosition(null);
+          // setLightPosition(null);
           setHoverd(null);
         }}
         onClick={() => {
@@ -192,20 +193,12 @@ export const Models = ({
       </group>
 
       <Physics gravity={[0, -50, 0]}>
-        {/* {fog ? (
-          <PerspectiveCamera
-            makeDefault
-            position={[0, 17, -25]}
-            rotation={[0.2, 3.1, 0]}
-          />
-        ) : (
-
-        )} */}
-        <SkeletonModel />
-
+        <Debug>
+          <SkeletonModel />
+        </Debug>
         <Ground position={[0, -5, 0]} />
       </Physics>
-      <fog attach="fog" args={['black', 30, fog ? 60 : 0]} />
+      {/* <fog attach="fog" args={['black', 30, fog ? 60 : 300]} /> */}
     </>
   );
 };

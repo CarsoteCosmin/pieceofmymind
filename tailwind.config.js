@@ -3,24 +3,24 @@ module.exports = {
   theme: {
     colors: {
       'primary-1': {
-        500: '#0B0C10',
-        DEFAULT: '#0B0C10',
+        500: '#0C0032',
+        DEFAULT: '#0C0032',
       },
       'primary-2': {
-        500: '#1F2833',
-        DEFAULT: '#1F2833',
+        500: '#190061',
+        DEFAULT: '#190061',
       },
       'primary-3': {
-        500: '#C5C6C7',
-        DEFAULT: '#C5C6C7',
+        500: '#240090',
+        DEFAULT: '#240090',
       },
       'primary-4': {
-        500: '#66FCF1',
-        DEFAULT: '#66FCF1',
+        500: '#3500D3',
+        DEFAULT: '#3500D3',
       },
       'primary-5': {
-        500: '#45A293',
-        DEFAULT: '#45A293',
+        500: '#282828',
+        DEFAULT: '#282828',
       },
       white: '#FFFFFF',
       black: '#000000',

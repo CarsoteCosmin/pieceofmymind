@@ -70,15 +70,10 @@ export const Particles = ({ count, isMobile }) => {
 
   return (
     <>
-      <pointLight
-        position={[0, 0, 0]}
-        distance={200}
-        intensity={1}
-        color="lightblue"
-      />
-      <instancedMesh ref={mesh} args={[null, null, count]}>
+      <directionalLight intensity={5} />
+      <instancedMesh ref={mesh} args={[100, 100, count]}>
         <dodecahedronGeometry args={[0.2, 0]} />
-        <meshPhongMaterial color="#66FCF1" />
+        <meshPhongMaterial color="#240090" />
       </instancedMesh>
     </>
   );

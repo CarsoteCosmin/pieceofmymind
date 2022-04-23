@@ -40,8 +40,8 @@ body {
   height: 8px;
   top: -3px;
   left: -10px;
-  border-left: 2px solid #45a293;
-  border-top: 2px solid #45a293;
+  border-left: 2px solid #240090;
+  border-top: 2px solid #240090;
   transition: 0.5s;
 }
 
@@ -52,8 +52,8 @@ body {
   height: 8px;
   top: -3px;
   right: -10px;
-  border-right: 2px solid #66fcf1;
-  border-top: 2px solid #66fcf1;
+  border-right: 2px solid #3500d3;
+  border-top: 2px solid #3500d3;
   transition: 0.5s;
 }
 
@@ -64,8 +64,8 @@ body {
   height: 8px;
   bottom: -3px;
   right: -10px;
-  border-right: 2px solid #45a293;
-  border-bottom: 2px solid #45a293;
+  border-right: 2px solid #240090;
+  border-bottom: 2px solid #240090;
   transition: 0.5s;
 }
 
@@ -76,8 +76,8 @@ body {
   height: 8px;
   bottom: -3px;
   left: -10px;
-  border-left: 2px solid #66fcf1;
-  border-bottom: 2px solid #66fcf1;
+  border-left: 2px solid #3500d3;
+  border-bottom: 2px solid #3500d3;
   transition: 0.5s;
 }
 

@@ -5,7 +5,7 @@ export const Ground = (props) => {
   return (
     <mesh ref={ref} receiveShadow>
       <planeGeometry args={[500, 500]} />
-      <meshPhongMaterial />
+      <meshPhongMaterial transparent opacity={0.9} />
     </mesh>
   );
 };

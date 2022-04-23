@@ -14,7 +14,7 @@ export const WelcomePage = () => {
     <Suspense fallback={<FullPageLoader />}>
       <Canvas
         onCreated={(state) => state.events.connect(overlay.current)}
-        className="bg-primary-2"
+        className="bg-black"
       >
         <Particles count={isMobile ? 2500 : 5000} isMobile={isMobile} />
         <Environment preset="city" />
@@ -22,18 +22,18 @@ export const WelcomePage = () => {
 
       <section ref={overlay}>
         <header className="flex justify-center items-center absolute top-0 left-0 h-full w-full">
-          <h1 className="text-6xl text-white">Hello.</h1>
+          <h1 className="text-6xl text-white">Hello world.</h1>
         </header>
 
         <section className="absolute left-1/2 transform -translate-x-1/2 top-3/4">
-          <div className="font-semibold text-md lg:text-3xl text-primary-5 hover:text-primary-4">
+          <div className="font-semibold text-md lg:text-3xl text-white hover:text-primary-4">
             <NavLink
               to="/home"
               className="inline-flex justify-center items-center method p-1"
               title="Home"
             >
               <LightningBoltIcon className="w-7 h-7 mr-2" />
-              Get Started
+              Get started
               <span></span>
             </NavLink>
           </div>

@@ -1,37 +1,56 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef } from 'react';
+
+import { Vector3, Quaternion } from 'three';
+import { useFrame, useThree } from '@react-three/fiber';
 import {
   useGLTF,
   useAnimations,
-  PerspectiveCamera,
   OrbitControls,
+  PerspectiveCamera,
 } from '@react-three/drei';
-import { useCharacterControls } from '../../../../hooks/useCharacterControls';
-import { useFrame } from '@react-three/fiber';
-import { Vector3 } from 'three';
-import { useSphere } from '@react-three/cannon';
+import { useCompoundBody } from '@react-three/cannon';
+
+import { usePlayerControls, getDirectionOffset } from '../../../../hooks';
+import { PointerLockControls } from '../../../../camera-control/PointerLockControls';
+import { Camera } from '../../../../camera-control/Camera';
 
 export const SkeletonModel = ({ ...props }) => {
   const { nodes, materials, animations } = useGLTF('/skeleton.glb');
-  const { ref, actions } = useAnimations(animations);
-  const { forward, backward, left, right, attack } = useCharacterControls();
-  const [fovValue, setFovValue] = useState(50);
-  // const [rotationValue, setRotationValue] = useState(1);
+  const [ref, api] = useCompoundBody(() => ({
+    mass: 30,
+    type: 'Dynamic',
+    fixedRotation: true,
+    position: [0, -5, 0],
+    ...props,
+    shapes: [
+      { args: [1.5], position: [0, 4, 0], type: 'Sphere' },
+      { args: [1.5, 1.5, 2.5], position: [0, 2.2, 0], type: 'Cylinder' },
+      { args: [1.5], position: [0, 1.5, 0], type: 'Sphere' },
+    ],
+  }));
+  const group = useRef();
+  const { actions } = useAnimations(animations, group);
 
-  const SPEED = 20;
+  const rotateAngle = new Vector3(0, 1, 0);
+  const rotateQuarternion = new Quaternion();
+  const speed = 35;
+
   const direction = new Vector3();
   const frontVector = new Vector3();
   const sideVector = new Vector3();
 
-  const [object, api] = useSphere(() => ({
-    mass: 10,
-    position: [0, -4, 0],
-    type: 'Dynamic',
-  }));
+  const { forward, backward, left, right } = usePlayerControls();
 
-  const movement = useRef();
+  const velocity = useRef([0, 0, 0]);
 
   useEffect(() => {
-    if (forward || backward) {
+    api.velocity.subscribe((v) => (velocity.current = v));
+  }, []);
+
+  const { camera } = useThree();
+
+  useEffect(() => {
+    if (forward || backward || left || right) {
       actions['ms05_01_Run'].reset().fadeIn(0.5).play();
 
       return () => {
@@ -45,67 +64,60 @@ export const SkeletonModel = ({ ...props }) => {
     //     actions['ms05_01_Run'].fadeOut(0.5);
     //   };
     // } else
-    else if (attack) {
-      actions['ms05_01_Attack_02'].reset().fadeIn(0.5).play();
+    // if (attack) {
+    //   actions['ms05_01_Attack_02'].reset().fadeIn(0.5).play();
 
-      return () => actions['ms05_01_Attack_02'].fadeOut(0.5);
-    } else {
+    //   return () => actions['ms05_01_Attack_02'].fadeOut(0.5);
+    // } else
+    else {
       actions['ms05_01_Idle'].reset().fadeIn(0.5).play();
 
       return () => actions['ms05_01_Idle'].fadeOut(0.5);
     }
-  }, [forward, backward, attack]);
+  }, [forward, backward, left, right]);
 
   useFrame(() => {
-    if ((forward || backward) && fovValue <= 60) {
-      setFovValue(fovValue + 0.25);
-    } else if (fovValue >= 50) {
-      setFovValue(fovValue - 0.25);
+    if (forward || backward || left || right) {
+      const directionOffset = getDirectionOffset(
+        forward,
+        backward,
+        right,
+        left,
+      );
+
+      rotateQuarternion.setFromAxisAngle(rotateAngle, directionOffset);
+      group.current.quaternion.rotateTowards(rotateQuarternion, 0.2);
+
+      frontVector.set(0, 0, Number(backward) - Number(forward));
+      sideVector.set(Number(left) - Number(right), 0, 0);
+      direction
+        .subVectors(frontVector, sideVector)
+        .normalize()
+        .multiplyScalar(speed)
+        .applyEuler(camera.rotation);
+
+      api.velocity.set(direction.x, 0, direction.z);
     }
-
-    // if (left) {
-    //   setRotationValue(rotationValue + 0.025);
-    //   console.log(rotationValue);
-    // } else if (right) {
-    //   setRotationValue(rotationValue - 0.025);
-    //   console.log(rotationValue);
-    // }
-    frontVector.set(0, 0, Number(forward) - Number(backward));
-    sideVector.set(Number(right) - Number(left), 0, 0);
-    direction
-      .subVectors(frontVector, sideVector)
-      .normalize()
-      .multiplyScalar(SPEED);
-
-    api.velocity.set(direction.x, 0, direction.z);
-
-    object.current.getWorldPosition(movement.current.position);
   });
-  //rotation={[0, rotationValue, 0]}
 
   return (
     <>
-      <group ref={movement}>
+      {/* <Camera position={[0, 10, -25]} rotation={[0.25, 3.15, 0]} /> */}
+
+      <group ref={ref}>
+        {/* <PointerLockControls /> */}
         <PerspectiveCamera
           makeDefault
           position={[0, 16, -25]}
           rotation={[0.25, 3.15, 0]}
-          fov={fovValue}
         />
-        {/* <OrbitControls
-          makeDefault
-          maxDistance={200}
-          minDistance={0}
-          // object={object}
-          enablePan={false}
-          minPolarAngle={-Math.PI / 2}
-          maxPolarAngle={Math.PI / 2}
-        /> */}
-        <group ref={ref} scale={[0.04, 0.04, 0.04]}>
-          <group rotation={[Math.PI / 2, 0, 0]}>
-            <group rotation={[-Math.PI / 2, 0, 0]}>
+        <group ref={group} scale={[0.04, 0.04, 0.04]} dispose={null}>
+          <group rotation={[-Math.PI / 2, 0, 0]}>
+            <group rotation={[Math.PI / 2, 0, 0]}>
               <primitive object={nodes._rootJoint} />
               <skinnedMesh
+                receiveShadow
+                castShadow
                 geometry={nodes.Object_7.geometry}
                 material={materials.Material_67}
                 skeleton={nodes.Object_7.skeleton}
