@@ -2,8 +2,8 @@ import React, { useRef, useEffect, useState, useMemo } from 'react';
 
 import { Color, SpotLight } from 'three';
 import { useFrame } from '@react-three/fiber';
-import { OrbitControls, useGLTF } from '@react-three/drei';
-import { Debug, Physics } from '@react-three/cannon';
+import { useGLTF } from '@react-three/drei';
+import { Physics } from '@react-three/cannon';
 
 import SkeletonModel from '../common/portals/components/models/SkeletonModel';
 import Ground from '../common/portals/components/models/Ground';
@@ -15,11 +15,7 @@ const extras = {
   'material-envMapIntensity': 0.2,
 };
 
-export const Models = ({
-  fog,
-  // scroll,
-  isModelClicked = () => {},
-}) => {
+export const Models = ({ fog, isModelClicked = () => {} }) => {
   const { nodes, materials } = useGLTF('/models.glb');
   const group = useRef();
   const [hovered, setHoverd] = useState(null);
@@ -52,12 +48,10 @@ export const Models = ({
     <>
       <pointLight
         position={[0, -10, 0]}
-        distance={fog ? 20 : 500}
+        distance={fog ? 20 : 200}
         intensity={10}
         color="#240090"
       />
-
-      <directionalLight />
 
       <pointLight
         position={[0, 0, 0]}
@@ -65,20 +59,13 @@ export const Models = ({
         intensity={10}
         color="#240090"
       />
-      {/* <SpotLight
-        castShadow
-        penumbra={0.2}
-        radiusTop={0.4}
-        radiusBottom={40}
-        distance={200}
-        // angle={0.45}
-        attenuation={20}
-        // anglePower={5}
-        intensity={1}
-        opacity={0.2}
-        position={[0, 30, -80]}
+
+      <pointLight
+        position={[0, 15, 0]}
+        distance={fog ? 20 : 200}
+        intensity={10}
+        color="#240090"
       />
-      */}
 
       {lightPosition !== null && (
         <>
@@ -116,7 +103,6 @@ export const Models = ({
         }}
         onPointerOut={(event) => {
           event.stopPropagation();
-          // setLightPosition(null);
           setHoverd(null);
         }}
         onClick={() => {
@@ -192,13 +178,13 @@ export const Models = ({
         />
       </group>
 
-      <Physics gravity={[0, -50, 0]}>
-        <Debug>
-          <SkeletonModel />
-        </Debug>
+      <Physics gravity={[0, -50, 0]} size={2}>
+        <SkeletonModel />
+
         <Ground position={[0, -5, 0]} />
       </Physics>
-      {/* <fog attach="fog" args={['black', 30, fog ? 60 : 300]} /> */}
+
+      <fog attach="fog" args={['black', 30, fog ? 60 : 300]} />
     </>
   );
 };

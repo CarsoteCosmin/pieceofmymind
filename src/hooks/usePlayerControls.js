@@ -11,6 +11,7 @@ export const usePlayerControls = () => {
     KeyD: 'right',
     ArrowRight: 'right',
     Space: 'attack',
+    ShiftLeft: 'sprint',
   };
   const moveFieldByKey = (key) => keys[key];
 
@@ -20,6 +21,7 @@ export const usePlayerControls = () => {
     left: false,
     right: false,
     attack: false,
+    sprint: false,
   });
 
   useEffect(() => {

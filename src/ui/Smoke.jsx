@@ -13,7 +13,7 @@ export const Smoke = () => {
 
   const particles = useMemo(() => {
     const cloudParticles = [];
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 10; i++) {
       const positionX = Math.random() * 70 - 35;
       const rotationZ = Math.random() * 2 * Math.PI;
 
