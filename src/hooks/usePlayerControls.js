@@ -32,10 +32,19 @@ export const usePlayerControls = () => {
       }));
     };
     const handleKeyUp = (event) => {
-      setMovement((movement) => ({
-        ...movement,
-        [moveFieldByKey(event.code)]: false,
-      }));
+      if (event.code === 'Space') {
+        setTimeout(() => {
+          setMovement((movement) => ({
+            ...movement,
+            [moveFieldByKey(event.code)]: false,
+          }));
+        }, 700);
+      } else {
+        setMovement((movement) => ({
+          ...movement,
+          [moveFieldByKey(event.code)]: false,
+        }));
+      }
     };
     document.addEventListener('keydown', handleKeyDown);
     document.addEventListener('keyup', handleKeyUp);

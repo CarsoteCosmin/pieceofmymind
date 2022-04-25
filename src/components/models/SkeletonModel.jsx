@@ -30,7 +30,8 @@ export const SkeletonModel = ({ ...props }) => {
 
   const walkDirection = new Vector3();
 
-  const { forward, backward, left, right, sprint } = usePlayerControls();
+  const { forward, backward, left, right, sprint, attack } =
+    usePlayerControls();
 
   const speed = sprint ? 40 : 30;
   const [fov, setFov] = useState(50);
@@ -54,12 +55,16 @@ export const SkeletonModel = ({ ...props }) => {
       actions['ms05_01_Run'].reset().fadeIn(0.5).play();
 
       return () => actions['ms05_01_Run'].fadeOut(0.5);
+    } else if (attack) {
+      actions['ms05_01_Attack_02'].reset().fadeIn(0.5).play();
+
+      return () => actions['ms05_01_Attack_02'].fadeOut(0.5);
     } else {
       actions['ms05_01_Idle'].reset().fadeIn(0.5).play();
 
       return () => actions['ms05_01_Idle'].fadeOut(0.5);
     }
-  }, [forward, backward, sprint]);
+  }, [forward, backward, sprint, attack]);
 
   useFrame(() => {
     if (forward && fov <= 60) {

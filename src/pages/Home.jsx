@@ -3,15 +3,14 @@ import React, { Suspense, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Environment } from '@react-three/drei';
 
-import { FullPageLoader, Models } from '../ui/index';
+import { FullPageLoader, Models, Smoke } from '../ui/index';
 import IntroductionText from '../components/IntroductionText';
 import { ArrowsExpandIcon, LightBulbIcon, XIcon } from '@heroicons/react/solid';
-import Smoke from '../ui/Smoke';
 
 export const HomePage = () => {
   // const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-  const [isLightButtonVisible, setIsLightButtonVisible] = useState(true);
+  const [isLightButtonVisible, setIsLightButtonVisible] = useState(false);
   const [isFogVisible, setIsFogVisible] = useState(true);
   const [isSecondText, setIsSecondText] = useState(false);
   const [isThirdText, setIsThirdText] = useState(false);
