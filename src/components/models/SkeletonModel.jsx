@@ -150,5 +150,3 @@ export const SkeletonModel = ({ ...props }) => {
 };
 
 export default SkeletonModel;
-
-useGLTF.preload('/skeleton.glb');

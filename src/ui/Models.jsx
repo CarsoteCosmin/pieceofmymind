@@ -188,5 +188,3 @@ export const Models = ({ fog, isModelClicked = () => {} }) => {
   );
 };
 export default Models;
-
-useGLTF.preload('/models.glb');
