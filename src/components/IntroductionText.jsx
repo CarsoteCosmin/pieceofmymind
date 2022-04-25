@@ -35,6 +35,7 @@ const thirdIntroductionText = [
 
 export const IntroductionText = ({
   isLightOn = () => {},
+  isFirstText,
   isSecondText,
   isThirdText,
 }) => {
@@ -43,16 +44,18 @@ export const IntroductionText = ({
   const [isSecondTextDone, setIsSecondTextDone] = useState(false);
 
   useEffect(() => {
-    firstIntroductionText.forEach((text, index) => {
-      setTimeout(() => {
-        setText(text);
-        if (index === 9) {
-          setShow(false);
-          isLightOn();
-        }
-      }, index * 3000);
-    });
-  }, []);
+    if (isFirstText) {
+      firstIntroductionText.forEach((text, index) => {
+        setTimeout(() => {
+          setText(text);
+          if (index === 9) {
+            setShow(false);
+            isLightOn();
+          }
+        }, index * 3000);
+      });
+    }
+  }, [isFirstText]);
 
   useEffect(() => {
     if (isSecondText) {

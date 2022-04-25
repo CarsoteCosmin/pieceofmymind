@@ -1,8 +1,6 @@
 import React from 'react';
-// eslint-disable-next-line
-// import { Header, Footer } from './common/index';
+// import { Header } from './common/index';
 import AppRouter from './router/index';
-// import FullPageLoader from './ui/FullPageLoader';
 
 const App = () => {
   return (
@@ -13,10 +11,6 @@ const App = () => {
       {/* <header>
         <Header />
       </header> */}
-
-      {/* <footer>
-        <Footer />
-      </footer> */}
     </div>
   );
 };
