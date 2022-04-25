@@ -27,13 +27,12 @@ export const SkeletonModel = ({ ...props }) => {
   const rotateAngleFrontAxis = new Vector3(0, 1, 0);
   const rotateAngleSideAxis = new Vector3(0, 0, 0);
   const rotateQuarternion = new Quaternion();
-  const rotation = new Vector3();
 
   const walkDirection = new Vector3();
 
   const { forward, backward, left, right, sprint } = usePlayerControls();
 
-  const speed = sprint ? 50 : 40;
+  const speed = sprint ? 40 : 30;
   const [fov, setFov] = useState(50);
 
   const velocity = useRef([0, 0, 0]);
@@ -95,7 +94,7 @@ export const SkeletonModel = ({ ...props }) => {
       );
 
       const moveX = walkDirection.x;
-      const rotateY = right ? -Math.PI / 2 : left ? Math.PI / 2 : 0;
+      const rotateY = right ? -Math.PI : left ? Math.PI : 0;
       const moveZ = walkDirection.z;
 
       if (forward || backward) {

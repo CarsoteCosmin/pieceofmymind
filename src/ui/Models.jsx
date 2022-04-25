@@ -177,7 +177,7 @@ export const Models = ({ fog, isModelClicked = () => {} }) => {
         />
       </group>
 
-      <Physics gravity={[0, -50, 0]} size={2}>
+      <Physics size={2}>
         <SkeletonModel />
 
         <Ground position={[0, -5, 0]} />
