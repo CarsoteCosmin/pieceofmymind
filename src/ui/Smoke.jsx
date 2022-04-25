@@ -33,7 +33,7 @@ export const Smoke = () => {
       tempObject.updateMatrix();
       ref.current.setMatrixAt(i, tempObject.matrix);
     });
-    particles.forEach((particle) => (particle.rotationZ -= 0.005));
+    particles.forEach((particle) => (particle.rotationZ -= 0.003));
     ref.current.instanceMatrix.needsUpdate = true;
   });
 

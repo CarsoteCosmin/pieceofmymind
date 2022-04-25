@@ -5,7 +5,7 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { useGLTF, useAnimations, PerspectiveCamera } from '@react-three/drei';
 import { useCompoundBody } from '@react-three/cannon';
 
-import { usePlayerControls, getDirectionOffset } from '../../../../hooks';
+import { usePlayerControls, getDirectionOffset } from '../../hooks';
 
 export const SkeletonModel = ({ ...props }) => {
   const { nodes, materials, animations } = useGLTF('/skeleton.glb');
@@ -27,6 +27,7 @@ export const SkeletonModel = ({ ...props }) => {
   const rotateAngleFrontAxis = new Vector3(0, 1, 0);
   const rotateAngleSideAxis = new Vector3(0, 0, 0);
   const rotateQuarternion = new Quaternion();
+  const rotation = new Vector3();
 
   const walkDirection = new Vector3();
 
@@ -83,6 +84,8 @@ export const SkeletonModel = ({ ...props }) => {
       );
 
       camera.getWorldDirection(walkDirection);
+
+      walkDirection.y = 0;
 
       walkDirection.normalize().multiplyScalar(speed);
 

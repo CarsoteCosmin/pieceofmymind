@@ -5,8 +5,7 @@ import { useFrame } from '@react-three/fiber';
 import { useGLTF } from '@react-three/drei';
 import { Physics } from '@react-three/cannon';
 
-import SkeletonModel from '../common/portals/components/models/SkeletonModel';
-import Ground from '../common/portals/components/models/Ground';
+import { SkeletonModel, Ground } from '../components/models';
 
 const color = new Color();
 const extras = {
