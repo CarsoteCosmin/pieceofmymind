@@ -1,12 +1,9 @@
-import React, { lazy, Suspense } from 'react';
+import React, { Suspense } from 'react';
 
 import { Routes, Route } from 'react-router-dom';
 
-import { FullPageLoader } from '../ui/FullPageLoader';
-
-const WelcomePage = lazy(() => import('../pages/Welcome'));
-const HomePage = lazy(() => import('../pages/Home'));
-const NotFound = lazy(() => import('../pages/NotFound'));
+import { WelcomePage, HomePage, NotFound } from '../pages';
+import { FullPageLoader } from '../ui';
 
 const AppRouter = () => {
   return (

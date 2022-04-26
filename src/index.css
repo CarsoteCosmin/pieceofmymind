@@ -1,34 +1,3 @@
-#app,
-.scroll {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  user-select: none;
-  overflow: auto;
-}
-
-#app {
-  overflow: auto;
-}
-
-.scroll {
-  position: absolute;
-  top: 0;
-  left: 0;
-  overflow-y: auto;
-}
-
-.scroll > div {
-  scroll-snap-align: start;
-}
-
-body {
-  position: fixed;
-  overflow: auto;
-  overscroll-behavior-y: none;
-}
-
 .method {
   cursor: pointer;
 }

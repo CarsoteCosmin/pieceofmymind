@@ -8,8 +8,6 @@ import App from './App';
 import { initializeApp } from 'firebase/app';
 import { getAnalytics } from 'firebase/analytics';
 
-import { useGLTF } from '@react-three/drei';
-
 const firebaseConfig = {
   apiKey: 'AIzaSyD8dXZHFDLg3_4CHf9wwlyaOYvV98xlA_Y',
   authDomain: 'aboutme-13468.firebaseapp.com',
@@ -23,9 +21,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 // eslint-disable-next-line
 const analytics = getAnalytics(app);
-
-useGLTF.preload('/models.glb');
-useGLTF.preload('/skeleton.glb');
 
 const container = document.getElementById('app');
 const root = createRoot(container); // createRoot(container!) if you use TypeScript

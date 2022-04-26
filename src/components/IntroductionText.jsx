@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
+import { useGlobal } from '../state';
+
 const firstIntroductionText = [
   'Hello, hello',
   'so... my name is Cosmin',
@@ -34,28 +36,28 @@ const thirdIntroductionText = [
 ];
 
 export const IntroductionText = ({
-  isLightOn = () => {},
-  isFirstText,
   isSecondText,
   isThirdText,
+  isModalOpen = () => {},
 }) => {
+  const [{ booleanValues, isFirstRender }, dispatch] = useGlobal();
   const [text, setText] = useState(null);
   const [show, setShow] = useState(true);
-  const [isSecondTextDone, setIsSecondTextDone] = useState(false);
 
   useEffect(() => {
-    if (isFirstText) {
-      firstIntroductionText.forEach((text, index) => {
-        setTimeout(() => {
-          setText(text);
-          if (index === 9) {
-            setShow(false);
-            isLightOn();
-          }
-        }, index * 3000);
-      });
-    }
-  }, [isFirstText]);
+    firstIntroductionText.forEach((text, index) => {
+      setTimeout(() => {
+        setText(text);
+        if (index === 9) {
+          setShow(false);
+          dispatch({
+            type: 'BOOLEAN_VALUES',
+            isLightButtonVisible: true,
+          });
+        }
+      }, index * 3000);
+    });
+  }, []);
 
   useEffect(() => {
     if (isSecondText) {
@@ -65,7 +67,6 @@ export const IntroductionText = ({
           setText(text);
           if (index === 6) {
             setShow(false);
-            setIsSecondTextDone(true);
           }
         }, [index === 1 ? 500 : index * 3000]);
       });
@@ -73,18 +74,23 @@ export const IntroductionText = ({
   }, [isSecondText]);
 
   useEffect(() => {
-    if (isThirdText && isSecondTextDone) {
+    if (isThirdText) {
       setShow(true);
       thirdIntroductionText.forEach((text, index) => {
         setTimeout(() => {
           setText(text);
           if (index === 6) {
             setShow(false);
+            isModalOpen();
+            dispatch({
+              type: 'FIRST_RENDER',
+              firstRender: false,
+            });
           }
         }, [index === 1 ? 500 : index * 3000]);
       });
     }
-  }, [isSecondTextDone, isThirdText]);
+  }, [isThirdText]);
 
   return (
     <div

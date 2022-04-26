@@ -7,7 +7,6 @@ import { Physics } from '@react-three/cannon';
 
 import { SkeletonModel, Ground } from '../components/models';
 
-const color = new Color();
 const extras = {
   receiveShadow: true,
   castShadow: true,
@@ -16,6 +15,7 @@ const extras = {
 
 export const Models = ({ fog, isModelClicked = () => {} }) => {
   const { nodes, materials } = useGLTF('/models.glb');
+  const color = new Color();
   const group = useRef();
   const [hovered, setHoverd] = useState(null);
   const light = useMemo(() => new SpotLight(0xffffff), []);
@@ -188,3 +188,5 @@ export const Models = ({ fog, isModelClicked = () => {} }) => {
   );
 };
 export default Models;
+
+useGLTF.preload('/models.glb');

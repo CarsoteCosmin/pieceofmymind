@@ -62,7 +62,7 @@ export const SkeletonModel = ({ ...props }) => {
     } else {
       actions['ms05_01_Idle'].reset().fadeIn(0.5).play();
 
-      return () => actions['ms05_01_Idle'].fadeOut(0.5);
+      return () => actions['ms05_01_Idle']?.fadeOut(0.5);
     }
   }, [forward, backward, sprint, attack]);
 
@@ -150,3 +150,5 @@ export const SkeletonModel = ({ ...props }) => {
 };
 
 export default SkeletonModel;
+
+useGLTF.preload('/skeleton.glb');
