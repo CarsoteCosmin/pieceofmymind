@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState, useMemo } from 'react';
 
 import { Color, SpotLight } from 'three';
 import { useFrame } from '@react-three/fiber';
-import { useGLTF } from '@react-three/drei';
+import { OrbitControls, useGLTF } from '@react-three/drei';
 import { Physics } from '@react-three/cannon';
 
 import { SkeletonModel, Ground } from '../components/models';
@@ -13,7 +13,7 @@ const extras = {
   'material-envMapIntensity': 0.2,
 };
 
-export const Models = ({ fog, isModelClicked = () => {} }) => {
+export const Models = ({ fog, isCharacterLive, isModelClicked = () => {} }) => {
   const { nodes, materials } = useGLTF('/models.glb');
   const color = new Color();
   const group = useRef();
@@ -30,17 +30,19 @@ export const Models = ({ fog, isModelClicked = () => {} }) => {
   }, [hovered]);
 
   useFrame(({ clock }) => {
-    group.current.children.forEach((child, index) => {
-      child.material.color.lerp(
-        color
-          .set(hovered === child.name ? '#3500D3' : '#240090')
-          .convertSRGBToLinear(),
-        hovered ? 0.1 : 0.05,
-      );
+    if (!fog) {
+      group.current.children.forEach((child, index) => {
+        child.material.color.lerp(
+          color
+            .set(hovered === child.name ? '#3500D3' : '#240090')
+            .convertSRGBToLinear(),
+          hovered ? 0.1 : 0.05,
+        );
 
-      const et = clock.elapsedTime;
-      child.position.y = Math.sin(et + index * 1000);
-    });
+        const et = clock.elapsedTime;
+        child.position.y = Math.sin(et + index * 1000);
+      });
+    }
   });
 
   return (
@@ -92,20 +94,26 @@ export const Models = ({ fog, isModelClicked = () => {} }) => {
         position={[0, 4, 0]}
         ref={group}
         onPointerOver={(event) => {
-          event.stopPropagation();
-          setLightPosition([
-            event.object.position['x'],
-            event.object.position['y'],
-            event.object.position['z'],
-          ]);
-          setHoverd(event.object.name);
+          if (!fog) {
+            event.stopPropagation();
+            setLightPosition([
+              event.object.position['x'],
+              event.object.position['y'],
+              event.object.position['z'],
+            ]);
+            setHoverd(event.object.name);
+          }
         }}
         onPointerOut={(event) => {
-          event.stopPropagation();
-          setHoverd(null);
+          if (!fog) {
+            event.stopPropagation();
+            setHoverd(null);
+          }
         }}
         onClick={() => {
-          isModelClicked();
+          if (!fog) {
+            isModelClicked();
+          }
         }}
       >
         <mesh
@@ -177,13 +185,23 @@ export const Models = ({ fog, isModelClicked = () => {} }) => {
         />
       </group>
 
+      {!isCharacterLive && (
+        <OrbitControls
+          target={[0, -2, 0]}
+          enablePan={false}
+          minDistance={1}
+          maxDistance={50}
+          maxPolarAngle={1.5}
+        />
+      )}
+
       <Physics size={2}>
-        <SkeletonModel />
+        {isCharacterLive && <SkeletonModel />}
 
         <Ground position={[0, -5, 0]} />
       </Physics>
 
-      <fog attach="fog" args={['black', 30, fog ? 60 : 300]} />
+      <fog attach="fog" args={['black', 30, fog ? 40 : 300]} />
     </>
   );
 };
