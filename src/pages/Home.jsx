@@ -8,7 +8,8 @@ import { ArrowsExpandIcon, LightBulbIcon, XIcon } from '@heroicons/react/solid';
 import { useGlobal } from '../state';
 import Modal from '../common/portals/components/Modal';
 
-import { Models, Smoke } from '../ui/index';
+import { Models } from '../components/models';
+import { Smoke } from '../ui/index';
 import IntroductionText from '../components/IntroductionText';
 
 export const HomePage = () => {

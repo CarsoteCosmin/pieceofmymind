@@ -13,12 +13,12 @@ export const SkeletonModel = ({ ...props }) => {
     mass: 30,
     type: 'Dynamic',
     position: [0, -5, 0],
-    ...props,
     shapes: [
       { args: [1.5], position: [0, 4, 0], type: 'Sphere' },
       { args: [1.5, 1.5, 2.5], position: [0, 2.2, 0], type: 'Cylinder' },
       { args: [1.5], position: [0, 1.5, 0], type: 'Sphere' },
     ],
+    ...props,
   }));
   const group = useRef();
   const { camera } = useThree();
@@ -29,20 +29,17 @@ export const SkeletonModel = ({ ...props }) => {
   const rotateQuarternion = new Quaternion();
 
   const walkDirection = new Vector3();
+  const velocitys = useRef([0, 0, 0]);
 
-  const { forward, backward, left, right, sprint, attack } =
+  const { forward, backward, left, right, sprint, jump, attack } =
     usePlayerControls();
 
   const speed = sprint ? 40 : 30;
   const [fov, setFov] = useState(50);
 
-  const velocity = useRef([0, 0, 0]);
-  const angularVelocity = useRef([0, 0, 0]);
-
   useEffect(() => {
-    api.velocity.subscribe((v) => (velocity.current = v));
-    api.angularVelocity.subscribe((av) => (angularVelocity.current = av));
-  }, []);
+    api.velocity.subscribe((v) => (velocitys.current = v));
+  }, [api]);
 
   useEffect(() => {
     if (forward || backward) {
@@ -79,7 +76,7 @@ export const SkeletonModel = ({ ...props }) => {
       }
     }
 
-    if (forward || backward || left || right) {
+    if (forward || backward || left || right || jump) {
       const directionOffset = getDirectionOffset(
         forward,
         backward,
@@ -99,7 +96,7 @@ export const SkeletonModel = ({ ...props }) => {
       );
 
       const moveX = walkDirection.x;
-      const rotateY = right ? -Math.PI : left ? Math.PI : 0;
+      const rotateY = right ? -Math.PI / 2 : left ? Math.PI / 2 : 0;
       const moveZ = walkDirection.z;
 
       if (forward || backward) {
@@ -109,9 +106,7 @@ export const SkeletonModel = ({ ...props }) => {
         );
         group.current.quaternion.rotateTowards(rotateQuarternion, 0.2);
 
-        api.velocity.set(moveX, 0, moveZ);
-      } else {
-        api.velocity.set(0, 0, moveZ);
+        api.velocity.set(moveX, velocitys.current[1], moveZ);
       }
 
       api.angularFactor.set(0, 1, 0);
@@ -126,22 +121,20 @@ export const SkeletonModel = ({ ...props }) => {
       <group ref={ref}>
         <PerspectiveCamera
           makeDefault
-          position={[0, 16, -25]}
-          rotation={[0.25, 3.15, 0]}
+          position={[0, 16, 25]}
+          rotation={[-0.25, 0, 0]}
           fov={fov}
         />
         <group ref={group} scale={[0.04, 0.04, 0.04]} dispose={null}>
-          <group rotation={[-Math.PI / 2, 0, 0]}>
-            <group rotation={[Math.PI / 2, 0, 0]}>
-              <primitive object={nodes._rootJoint} />
-              <skinnedMesh
-                receiveShadow
-                castShadow
-                geometry={nodes.Object_7.geometry}
-                material={materials.Material_67}
-                skeleton={nodes.Object_7.skeleton}
-              />
-            </group>
+          <group rotation={[0, Math.PI, 0]}>
+            <primitive object={nodes._rootJoint} />
+            <skinnedMesh
+              receiveShadow
+              castShadow
+              geometry={nodes.Object_7.geometry}
+              material={materials.Material_67}
+              skeleton={nodes.Object_7.skeleton}
+            />
           </group>
         </group>
       </group>

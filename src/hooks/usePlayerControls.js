@@ -10,7 +10,8 @@ export const usePlayerControls = () => {
     ArrowLeft: 'left',
     KeyD: 'right',
     ArrowRight: 'right',
-    Space: 'attack',
+    Space: 'jump',
+    KeyF: 'attack',
     ShiftLeft: 'sprint',
   };
   const moveFieldByKey = (key) => keys[key];
@@ -20,6 +21,7 @@ export const usePlayerControls = () => {
     backward: false,
     left: false,
     right: false,
+    jump: false,
     attack: false,
     sprint: false,
   });
@@ -32,7 +34,7 @@ export const usePlayerControls = () => {
       }));
     };
     const handleKeyUp = (event) => {
-      if (event.code === 'Space') {
+      if (event.code === 'KeyF') {
         setTimeout(() => {
           setMovement((movement) => ({
             ...movement,

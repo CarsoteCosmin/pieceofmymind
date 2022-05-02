@@ -3,9 +3,10 @@ import React, { useRef, useEffect, useState, useMemo } from 'react';
 import { Color, SpotLight } from 'three';
 import { useFrame } from '@react-three/fiber';
 import { OrbitControls, useGLTF } from '@react-three/drei';
-import { Physics } from '@react-three/cannon';
+import { Debug, Physics } from '@react-three/cannon';
 
-import { SkeletonModel, Ground } from '../components/models';
+import { SkeletonModel, Ground } from './index';
+import Portal from './Portal';
 
 const extras = {
   receiveShadow: true,
@@ -19,6 +20,7 @@ export const Models = ({ fog, isCharacterLive, isModelClicked = () => {} }) => {
   const group = useRef();
   const [hovered, setHoverd] = useState(null);
   const light = useMemo(() => new SpotLight(0xffffff), []);
+  const portalLight = useMemo(() => new SpotLight(0xffffff), []);
   const [lightPosition, setLightPosition] = useState(null);
 
   useEffect(() => {
@@ -185,7 +187,7 @@ export const Models = ({ fog, isCharacterLive, isModelClicked = () => {} }) => {
         />
       </group>
 
-      {!isCharacterLive && (
+      {/* {!isCharacterLive && (
         <OrbitControls
           target={[0, -2, 0]}
           enablePan={false}
@@ -193,10 +195,29 @@ export const Models = ({ fog, isCharacterLive, isModelClicked = () => {} }) => {
           maxDistance={50}
           maxPolarAngle={1.5}
         />
-      )}
+      )} */}
 
-      <Physics size={2}>
-        {isCharacterLive && <SkeletonModel />}
+      {/* <primitive
+        castShadow
+        penumbra={0.6}
+        radiusTop={0.4}
+        radiusBottom={30}
+        distance={60}
+        attenuation={20}
+        intensity={10}
+        opacity={0.5}
+        position={[0, 35, -120]}
+        color="white"
+        object={portalLight}
+      />
+      <primitive object={portalLight.target} position={[0, 10, -120]} /> */}
+
+      <Physics size={3}>
+        {!isCharacterLive && <SkeletonModel />}
+
+        {/* <Debug>
+          <Portal scale={[4, 4, 4]} />
+        </Debug> */}
 
         <Ground position={[0, -5, 0]} />
       </Physics>
