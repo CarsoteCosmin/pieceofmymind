@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
+import { useFrame, useThree } from '@react-three/fiber';
 import { useGLTF } from '@react-three/drei';
 import { useCompoundBody } from '@react-three/cannon';
-import { useFrame } from '@react-three/fiber';
 
 export const Portal = ({ ...props }) => {
   const { nodes, materials } = useGLTF('/portal.glb');
@@ -15,15 +15,19 @@ export const Portal = ({ ...props }) => {
     ],
   }));
   const [initialPosition, setInitialPosition] = useState(-40);
+  const { camera } = useThree();
 
   useEffect(() => {
     ref.current.getObjectByName('Stone').material.color.set('#282828');
   }, []);
 
-  useFrame(() => {
+  useFrame((state) => {
     if (initialPosition < -9) {
       setInitialPosition(initialPosition + 0.25);
       api.position.set(0, initialPosition, -120);
+
+      camera.rotation.z += Math.sin(state.clock.elapsedTime * 10 * 0.9) / 1000;
+      camera.rotation.x += Math.sin(state.clock.elapsedTime * 10) / 1000;
     }
   });
 

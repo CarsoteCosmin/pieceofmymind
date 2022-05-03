@@ -21,7 +21,6 @@ const App = () => {
     },
     isFirstRender: {
       firstRender: true,
-      ceva: 'ceva',
     },
   };
 

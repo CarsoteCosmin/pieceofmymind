@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Canvas } from '@react-three/fiber';
 import { Environment } from '@react-three/drei';
@@ -13,13 +13,23 @@ import { Smoke } from '../ui/index';
 import IntroductionText from '../components/IntroductionText';
 
 export const HomePage = () => {
-  // const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-  const [{ booleanValues, isFirstRender }] = useGlobal();
+  const [{ booleanValues, isFirstRender }, dispatch] = useGlobal();
   const [isFogVisible, setIsFogVisible] = useState(true);
   const [isSecondText, setIsSecondText] = useState(false);
   const [isThirdText, setIsThirdText] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSecondTextDone, setIsSecondTextDone] = useState(false);
+
+  useEffect(() => {
+    if (isFirstRender.firstRender) {
+      dispatch({
+        type: 'BOOLEAN_VALUES',
+        isFirstText: true,
+        isLightButtonVisible: false,
+      });
+    }
+  }, []);
 
   return (
     <>
@@ -30,7 +40,7 @@ export const HomePage = () => {
           fog={isFogVisible}
           isCharacterLive={!isFirstRender.firstRender}
           isModelClicked={() => {
-            if (isSecondText === true) {
+            if (isSecondTextDone === true) {
               setIsThirdText(true);
             }
           }}
@@ -45,7 +55,9 @@ export const HomePage = () => {
             isModalOpen={() => {
               setIsModalOpen(true);
             }}
-            // isFirstText={isModalOpen === false ? true : false}
+            isSecondTextDoneCall={() => {
+              setIsSecondTextDone(true);
+            }}
             isSecondText={isSecondText}
             isThirdText={isThirdText}
           />

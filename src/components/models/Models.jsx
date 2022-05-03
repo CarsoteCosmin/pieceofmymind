@@ -215,9 +215,7 @@ export const Models = ({ fog, isCharacterLive, isModelClicked = () => {} }) => {
       <Physics size={3}>
         {!isCharacterLive && <SkeletonModel />}
 
-        {/* <Debug>
-          <Portal scale={[4, 4, 4]} />
-        </Debug> */}
+        <Debug>{isCharacterLive && <Portal scale={[4, 4, 4]} />}</Debug>
 
         <Ground position={[0, -5, 0]} />
       </Physics>

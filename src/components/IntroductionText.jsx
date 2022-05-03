@@ -29,8 +29,7 @@ const thirdIntroductionText = [
   '',
   'oh, so you are still there',
   `well, that's good`,
-  'i will leave for now',
-  'but my mind keeper will show you around',
+  'i will ask my mind keeper to show you around',
   'hah, mind keeper, i am so funny',
   '',
 ];
@@ -39,25 +38,28 @@ export const IntroductionText = ({
   isSecondText,
   isThirdText,
   isModalOpen = () => {},
+  isSecondTextDoneCall = () => {},
 }) => {
-  const [{ booleanValues, isFirstRender }, dispatch] = useGlobal();
+  const [{ booleanValues }, dispatch] = useGlobal();
   const [text, setText] = useState(null);
   const [show, setShow] = useState(true);
 
   useEffect(() => {
-    firstIntroductionText.forEach((text, index) => {
-      setTimeout(() => {
-        setText(text);
-        if (index === 9) {
-          setShow(false);
-          dispatch({
-            type: 'BOOLEAN_VALUES',
-            isLightButtonVisible: true,
-          });
-        }
-      }, index * 3000);
-    });
-  }, []);
+    if (booleanValues.isFirstText) {
+      firstIntroductionText.forEach((text, index) => {
+        setTimeout(() => {
+          setText(text);
+          if (index === 9) {
+            setShow(false);
+            dispatch({
+              type: 'BOOLEAN_VALUES',
+              isLightButtonVisible: true,
+            });
+          }
+        }, index * 3000);
+      });
+    }
+  }, [booleanValues.isFirstText]);
 
   useEffect(() => {
     if (isSecondText) {
@@ -67,6 +69,7 @@ export const IntroductionText = ({
           setText(text);
           if (index === 6) {
             setShow(false);
+            isSecondTextDoneCall();
           }
         }, [index === 1 ? 500 : index * 3000]);
       });
@@ -79,7 +82,7 @@ export const IntroductionText = ({
       thirdIntroductionText.forEach((text, index) => {
         setTimeout(() => {
           setText(text);
-          if (index === 6) {
+          if (index === 5) {
             setShow(false);
             isModalOpen();
             dispatch({

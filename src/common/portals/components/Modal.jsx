@@ -7,7 +7,7 @@ const controlOptions = [
   { keys: ['A', '←'], action: 'Left' },
   { keys: ['D', '→'], action: 'Right' },
   { keys: ['S', '↓'], action: 'Backward' },
-  { keys: ['Space'], action: 'Attack' },
+  { keys: ['F'], action: 'Attack' },
   { keys: ['Shift'], action: 'Sprint' },
 ];
 

@@ -1,9 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { useProgress } from '@react-three/drei';
 
+import { useGlobal } from '../state';
+
 export const FullPageLoader = () => {
   const { progress } = useProgress();
+  const [{ booleanValues }, dispatch] = useGlobal();
+
+  useEffect(() => {
+    if (progress === 100) {
+      dispatch({
+        type: 'BOOLEAN_VALUES',
+        isFirstText: true,
+        isLightButtonVisible: true,
+      });
+    }
+  }, [progress]);
 
   return (
     <>
