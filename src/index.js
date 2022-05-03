@@ -23,7 +23,7 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 
 const container = document.getElementById('app');
-const root = createRoot(container); // createRoot(container!) if you use TypeScript
+const root = createRoot(container);
 root.render(
   <BrowserRouter>
     <App />
