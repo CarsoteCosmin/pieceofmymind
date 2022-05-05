@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState, useMemo } from 'react';
 
 import { Color, SpotLight } from 'three';
-import { useFrame } from '@react-three/fiber';
+import { useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls, useGLTF } from '@react-three/drei';
 import { Debug, Physics } from '@react-three/cannon';
 
@@ -14,14 +14,22 @@ const extras = {
   'material-envMapIntensity': 0.2,
 };
 
-export const Models = ({ fog, isCharacterLive, isModelClicked = () => {} }) => {
+export const Models = ({
+  fog,
+  isCharacterLive,
+  isSecondTextDone,
+  isModelClicked = () => {},
+}) => {
   const { nodes, materials } = useGLTF('/models.glb');
   const color = new Color();
   const group = useRef();
   const [hovered, setHoverd] = useState(null);
   const light = useMemo(() => new SpotLight(0xffffff), []);
-  const portalLight = useMemo(() => new SpotLight(0xffffff), []);
+  // const portalLight = useMemo(() => new SpotLight(0xffffff), []);
   const [lightPosition, setLightPosition] = useState(null);
+  const [fogValue, setFogValue] = useState(40);
+  const [modelsYPosition, setmodelsYposition] = useState(-80);
+  const { camera } = useThree();
 
   useEffect(() => {
     if (hovered) {
@@ -33,17 +41,32 @@ export const Models = ({ fog, isCharacterLive, isModelClicked = () => {} }) => {
 
   useFrame(({ clock }) => {
     if (!fog) {
-      group.current.children.forEach((child, index) => {
-        child.material.color.lerp(
-          color
-            .set(hovered === child.name ? '#3500D3' : '#240090')
-            .convertSRGBToLinear(),
-          hovered ? 0.1 : 0.05,
-        );
+      if (modelsYPosition === 8) {
+        console.log(modelsYPosition);
+        group.current.children.forEach((child, index) => {
+          child.material.color.lerp(
+            color
+              .set(hovered === child.name ? '#3500D3' : '#240090')
+              .convertSRGBToLinear(),
+            hovered ? 0.1 : 0.05,
+          );
 
-        const et = clock.elapsedTime;
-        child.position.y = Math.sin(et + index * 1000);
-      });
+          const et = clock.elapsedTime;
+          child.position.y = Math.sin(et + index * 1000);
+        });
+      }
+
+      if (fogValue < 300) {
+        setFogValue(fogValue + 1);
+      }
+    } else if (fog && fogValue > 40) {
+      setFogValue(fogValue - 2);
+    }
+    if (isSecondTextDone && modelsYPosition < 8) {
+      setmodelsYposition(modelsYPosition + 0.25);
+
+      camera.rotation.z += Math.sin(clock.elapsedTime * 10 * 0.9) / 90;
+      camera.rotation.x += Math.sin(clock.elapsedTime * 10) / 90;
     }
   });
 
@@ -51,21 +74,21 @@ export const Models = ({ fog, isCharacterLive, isModelClicked = () => {} }) => {
     <>
       <pointLight
         position={[0, -10, 0]}
-        distance={fog ? 20 : 200}
+        distance={fog && fogValue <= 40 ? 20 : 200}
         intensity={10}
         color="#240090"
       />
 
       <pointLight
         position={[0, 0, 0]}
-        distance={fog ? 20 : 200}
+        distance={fog && fogValue <= 40 ? 20 : 200}
         intensity={10}
         color="#240090"
       />
 
       <pointLight
         position={[0, 15, 0]}
-        distance={fog ? 20 : 200}
+        distance={fog && fogValue <= 40 ? 20 : 200}
         intensity={10}
         color="#240090"
       />
@@ -93,7 +116,7 @@ export const Models = ({ fog, isCharacterLive, isModelClicked = () => {} }) => {
       )}
 
       <group
-        position={[0, 4, 0]}
+        position={[0, modelsYPosition, 0]}
         ref={group}
         onPointerOver={(event) => {
           if (!fog) {
@@ -187,15 +210,16 @@ export const Models = ({ fog, isCharacterLive, isModelClicked = () => {} }) => {
         />
       </group>
 
-      {/* {!isCharacterLive && (
+      {!isCharacterLive && (
         <OrbitControls
+          makeDefault
           target={[0, -2, 0]}
           enablePan={false}
           minDistance={1}
-          maxDistance={50}
+          maxDistance={25}
           maxPolarAngle={1.5}
         />
-      )} */}
+      )}
 
       {/* <primitive
         castShadow
@@ -213,14 +237,14 @@ export const Models = ({ fog, isCharacterLive, isModelClicked = () => {} }) => {
       <primitive object={portalLight.target} position={[0, 10, -120]} /> */}
 
       <Physics size={3}>
-        {!isCharacterLive && <SkeletonModel />}
+        {isCharacterLive && <SkeletonModel />}
 
-        <Debug>{isCharacterLive && <Portal scale={[4, 4, 4]} />}</Debug>
+        {/* <Debug>{!isCharacterLive && <Portal scale={[4, 4, 4]} />}</Debug> */}
 
-        <Ground position={[0, -5, 0]} />
+        <Ground />
       </Physics>
 
-      <fog attach="fog" args={['black', 30, fog ? 40 : 300]} />
+      <fog attach="fog" args={['black', 30, fogValue]} />
     </>
   );
 };

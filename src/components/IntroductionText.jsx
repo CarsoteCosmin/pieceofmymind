@@ -17,20 +17,20 @@ const firstIntroductionText = [
 
 const secondIntroductionText = [
   '',
-  'much better',
-  'right? right?',
-  'are you still there?',
-  'god, this is the third one that leaves',
-  'only this week...',
+  'ah, much better',
+  'now, let me show you a piece of my mind',
+  `let me just press a button aaand...`,
+  `they will rise up, don't get scared`,
   '',
 ];
 
 const thirdIntroductionText = [
   '',
-  'oh, so you are still there',
-  `well, that's good`,
-  'i will ask my mind keeper to show you around',
-  'hah, mind keeper, i am so funny',
+  'wise choice',
+  `that's my favourite topic too`,
+  'just kidding, this is my mind',
+  'ofcourse I like all the topics',
+  `ok so, I'll let my mind keeper guide you from now`,
   '',
 ];
 
@@ -67,9 +67,11 @@ export const IntroductionText = ({
       secondIntroductionText.forEach((text, index) => {
         setTimeout(() => {
           setText(text);
-          if (index === 6) {
-            setShow(false);
+          if (index === 3) {
             isSecondTextDoneCall();
+          }
+          if (index === 5) {
+            setShow(false);
           }
         }, [index === 1 ? 500 : index * 3000]);
       });
@@ -82,7 +84,7 @@ export const IntroductionText = ({
       thirdIntroductionText.forEach((text, index) => {
         setTimeout(() => {
           setText(text);
-          if (index === 5) {
+          if (index === 6) {
             setShow(false);
             isModalOpen();
             dispatch({

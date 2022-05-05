@@ -16,7 +16,7 @@ const App = () => {
 
   const initialState = {
     booleanValues: {
-      isLightButtonVisible: true,
+      isLightButtonVisible: false,
       isFirstText: false,
     },
     isFirstRender: {

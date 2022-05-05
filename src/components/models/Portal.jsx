@@ -8,7 +8,7 @@ export const Portal = ({ ...props }) => {
   const { nodes, materials } = useGLTF('/portal.glb');
   const [ref, api] = useCompoundBody(() => ({
     type: 'Static',
-    position: [0, -40, -120],
+    position: [0, -40, -30],
     shapes: [
       { args: [2.7, 12, 2.5], position: [-5, 10, -1.05], type: 'Box' },
       { args: [2.7, 12, 2.5], position: [5, 10, -1.05], type: 'Box' },
@@ -24,7 +24,7 @@ export const Portal = ({ ...props }) => {
   useFrame((state) => {
     if (initialPosition < -9) {
       setInitialPosition(initialPosition + 0.25);
-      api.position.set(0, initialPosition, -120);
+      api.position.set(0, initialPosition, -30);
 
       camera.rotation.z += Math.sin(state.clock.elapsedTime * 10 * 0.9) / 1000;
       camera.rotation.x += Math.sin(state.clock.elapsedTime * 10) / 1000;

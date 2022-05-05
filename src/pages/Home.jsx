@@ -39,6 +39,7 @@ export const HomePage = () => {
         <Models
           fog={isFogVisible}
           isCharacterLive={!isFirstRender.firstRender}
+          isSecondTextDone={isSecondTextDone}
           isModelClicked={() => {
             if (isSecondTextDone === true) {
               setIsThirdText(true);
