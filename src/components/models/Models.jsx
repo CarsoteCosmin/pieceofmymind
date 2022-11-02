@@ -42,7 +42,6 @@ export const Models = ({
   useFrame(({ clock }) => {
     if (!fog) {
       if (modelsYPosition === 8) {
-        console.log(modelsYPosition);
         group.current.children.forEach((child, index) => {
           child.material.color.lerp(
             color

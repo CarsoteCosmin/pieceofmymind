@@ -34,7 +34,7 @@ export const SkeletonModel = ({ ...props }) => {
   const { forward, backward, left, right, sprint, jump, attack } =
     usePlayerControls();
 
-  const speed = sprint ? 40 : 30;
+  const speed = sprint ? 40 : 10;
   const [fov, setFov] = useState(50);
 
   useEffect(() => {
@@ -64,15 +64,17 @@ export const SkeletonModel = ({ ...props }) => {
   }, [forward, backward, sprint, attack]);
 
   useFrame(() => {
-    if (forward && fov <= 60) {
-      setFov(fov + 0.25);
-    } else if (backward && fov >= 40) {
-      setFov(fov - 0.25);
-    } else if (forward === false && backward === false) {
-      if (fov < 50) {
+    if (sprint) {
+      if (forward && fov <= 60) {
         setFov(fov + 0.25);
-      } else if (fov > 50) {
+      } else if (backward && fov >= 40) {
         setFov(fov - 0.25);
+      } else if (forward === false && backward === false) {
+        if (fov < 50) {
+          setFov(fov + 0.25);
+        } else if (fov > 50) {
+          setFov(fov - 0.25);
+        }
       }
     }
 

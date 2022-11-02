@@ -33,7 +33,7 @@ export const HomePage = () => {
 
   return (
     <>
-      <Canvas shadows className="bg-black">
+      <Canvas shadows className="bg-black" frameloop="demand">
         <Smoke />
 
         <Models

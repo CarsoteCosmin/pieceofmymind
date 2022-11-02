@@ -13,7 +13,7 @@ export const FullPageLoader = () => {
       dispatch({
         type: 'BOOLEAN_VALUES',
         isFirstText: true,
-        isLightButtonVisible: false,
+        isLightButtonVisible: true,
       });
     }
   }, [progress]);
